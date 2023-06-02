@@ -1,21 +1,9 @@
-import {
-  FlatList,
-  Modal,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StatusBar } from "expo-status-bar";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import axios from "axios";
 import { useEffect, useState } from "react";
 export default function App() {
   const [usuarios, setUsuarios] = useState([]);
-  const [nome, setNome] = useState("");
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
-  const [modalVisible, setModalVisible] = useState(true);
-
   const url = "http://10.112.240.199:30000/usuarios";
 
   useEffect(() => {
@@ -36,28 +24,6 @@ export default function App() {
       })
       .catch((error) => console.log(error));
   };
-
-  const limparCampos = () => {
-    setNome("");
-    setEmail("");
-    setSenha("");
-  };
-
-  const criarUsuario = () => {
-    axios
-      .post(url, {
-        name: nome,
-        email: email,
-        password: senha,
-      })
-      .then((response) => {
-        console.log(response.data);
-        pegarUsuarios();
-        setModalVisible(false);
-        limparCampos();
-      })
-      .catch((erro) => console.log(erro));
-  };
   return (
     <View style={styles.container}>
       <Text>Lista De Usuarios</Text>
@@ -67,55 +33,6 @@ export default function App() {
         keyExtractor={(item) => item.id.toString()}
         style={styles.flatList}
       />
-      <TouchableOpacity
-        styles={styles.addButton}
-        onPress={() => {
-          setModalVisible(true);
-        }}
-      >
-        <Text style={styles.addButtonText}>+</Text>
-      </TouchableOpacity>
-      <Modal visible={modalVisible} animationType="fade" transparent>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => {
-                setModalVisible(false);
-                limparCampos();
-              }}
-            >
-              <Text>X</Text>
-            </TouchableOpacity>
-            <Text style={styles.modalTitle}>Criar Usuario</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Nome"
-              value={nome}
-              onChangeText={(valor) => setNome(valor)}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Email"
-              value={email}
-              onChangeText={(valor) => setEmail(valor)}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Senha"
-              value={senha}
-              onChangeText={(valor) => setSenha(valor)}
-              secureTextEntry
-            />
-            <TouchableOpacity
-              style={styles.createButton}
-              onPress={criarUsuario}
-            >
-              <Text style={styles.modalTitle}>Criar Usuario</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
     </View>
   );
 }
@@ -189,7 +106,6 @@ const styles = StyleSheet.create({
   closeButtonText: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#ff4500",
   },
   modalTitle: {
     fontSize: 20,
@@ -199,13 +115,12 @@ const styles = StyleSheet.create({
   input: {
     backgroundColor: "#ffffff",
     marginBottom: 10,
-    borderWidth: 1,
     padding: 10,
     borderColor: "#dddddd",
     borderRadius: 4,
   },
   createButton: {
-    borderColor: "#ff4500",
+    borderColor: "#dddddd",
     padding: 12,
     alignItems: "center",
     borderRadius: 4,
